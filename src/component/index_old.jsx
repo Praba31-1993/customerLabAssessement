@@ -36,8 +36,7 @@ export default function TransitionsModal() {
     const [totalSegment, setTotalSegment] = React.useState([])
     const [finalSchema, setFinalSchema] = React.useState([])
     const [segmentIndex, setSegmentIndex]=React.useState(0)
-    const [isAddSegmentClicked, setIsAddSegmentClicked] = React.useState(false)
-    const [UserDatas1, setUserDatas] = React.useState([])
+    // const [UserDatas, setUserDatas] = React.useState([])
 
     const UserDatas = [
         { label: "First Name", value: "First Name" },
@@ -49,9 +48,9 @@ export default function TransitionsModal() {
         { label: "State", value: "State" }
     ];
 
-    // useEffect(() => {
-    //     handleFinal()
-    // }, [finalSchema])
+    useEffect(() => {
+        handleFinal()
+    }, [finalSchema])
 
     
     const handleOpen = () => setOpen(true);
@@ -59,10 +58,27 @@ export default function TransitionsModal() {
     
     const handleChange = (event) => {
         const selectedIndex = event.target.value;
-        setsegmentValue(selectedIndex);
+        setsegmentValue(UserDatas[selectedIndex].value);
+        let newTotalSegment = [...totalSegment]
+        newTotalSegment.push(UserDatas[selectedIndex])
+        setTotalSegment(newTotalSegment)        
         
     };
     
+    const handleSubmit = () => {
+
+        const FinalSegmentResult = {
+            "segment_name": segmentName,
+            "schema": totalSegment.map(item => ({ [item.label]: item.value }))
+        };
+        const updatedFinalSchema = [...finalSchema, FinalSegmentResult];
+        setFinalSchema(updatedFinalSchema);
+        handleFinal()
+    }
+
+    const handleFinal = () => {
+        console.log('final', finalSchema);
+    }
     const addSegment = () => {
         const existingSegment = [...inputBox];
         let newArray = []
@@ -70,17 +86,11 @@ export default function TransitionsModal() {
         setInputBox(existingSegment)
         console.log('segmaent', segmentValue);
         setsegmentBoxValue(segmentValue)
-        setIsAddSegmentClicked(!isAddSegmentClicked)
-        setsegmentValue(null)
-        const res=UserDatas.filter((list,ind)=>ind!==segmentValue);
-        console.log('res',res);
-        setUserDatas(res)
 
     }
 
-    
+    console.log('segmentBoxValue', segmentBoxValue);
 
-console.log('segmentValue',segmentValue);
     return (
         <div>
             <Navbar title={"View Audience"} />
@@ -118,15 +128,15 @@ console.log('segmentValue',segmentValue);
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
-                                            value={segmentBoxValue}
+                                            value={segmentValue.value}
                                             label="Segment"
                                             onChange={handleChange}
                                         >
-                                            {UserDatas1.map((data, index) => 
+                                            {UserDatas.map((data, index) => 
                                             
                                             (
                                                 
-                                                <MenuItem key={index} value={index || segmentBoxValue}>{[UserDatas].filter((list, ind)=>ind!=segmentBoxValue&&list.value)}</MenuItem>
+                                                <MenuItem key={index} value={index}>{data.value }</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
@@ -168,7 +178,7 @@ console.log('segmentValue',segmentValue);
                             + Add new schema
                         </Link>
                         <Typography id="transition-modal-description" sx={{ mt: '13em', display: 'flex', gap: '2em', background: 'grey' }}>
-                            {/* <Button variant='outlined' onClick={handleSubmit}>Save the Segment</Button> */}
+                            <Button variant='outlined' onClick={handleSubmit}>Save the Segment</Button>
                             <Button variant='contained' onClick={handleClose}>Cancel</Button>
                         </Typography>
 
