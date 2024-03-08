@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -11,13 +11,15 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Link from '@mui/material/Link';
+import Navbar from './Navbar';
 
 const style = {
     position: 'absolute',
     top: '50%',
-    left: '50%',
+    left: '75%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: '50%',
+    height:'90vh',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -43,9 +45,9 @@ export default function TransitionsModal() {
         { label: "State", value: "tamilnadu" }
     ];
 
-    useEffect(()=>{
+    useEffect(() => {
         handleFinal()
-    },[finalSchema])
+    }, [finalSchema])
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleChange = (event) => {
@@ -57,8 +59,8 @@ export default function TransitionsModal() {
 
     };
 
-    const handleSubmit = ()=>{
-            
+    const handleSubmit = () => {
+
         const FinalSegmentResult = {
             "segment_name": segmentName,
             "schema": totalSegment.map(item => ({ [item.label]: item.value }))
@@ -68,11 +70,11 @@ export default function TransitionsModal() {
         handleFinal()
     }
 
-    const handleFinal = ()=>{
+    const handleFinal = () => {
         console.log('final', finalSchema);
     }
-    const addSegment = () =>{
-            const existingSegment = [...inputBox];
+    const addSegment = () => {
+        const existingSegment = [...inputBox];
         let newArray = []
         existingSegment.push(newArray)
         setInputBox(existingSegment)
@@ -80,7 +82,9 @@ export default function TransitionsModal() {
     }
     return (
         <div>
-            <Button onClick={handleOpen}>Save Segment</Button>
+            <Navbar title={"View Audience"}/>
+            
+            <Button style={{marginTop:'5em'}} onClick={handleOpen}>Save Segment</Button>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -96,15 +100,18 @@ export default function TransitionsModal() {
             >
                 <Fade in={open}>
                     <Box sx={style}>
-                        <Typography id="transition-modal-title" variant="h6" component="h2">
-                            <TextField id="outlined-basic" label="Enter the Name of the Segment" variant="outlined" fullWidth
+                        <Navbar title={"Saving Segment"}/>
+                        <Typography id="transition-modal-title" variant="h6" component="h2" style={{marginTop:'3em'}}>
+                            <Typography>Enter the Name of the Segment</Typography>
+                            <TextField id="outlined-basic" placeholder="Name of the Segment" variant="outlined" fullWidth
                                 onChange={(e) => setSegmentName(e.target.value)}
                                 value={segmentName}
+                                sx={{marginTop:'15px'}}
                             />
                         </Typography>
-                        <Typography id="transition-modal-description" sx={{ mt: 2, height: 'auto', width: '100%', border: '1px solid blue', padding:'10px' }}>
+                        <Typography id="transition-modal-description" sx={{ mt: 2, height: 'auto', width: '100%', border: '1px solid blue', padding: '10px' }}>
                             {inputBox.map((inputItem) => (
-                                <div style={{margin:'10px'}}>
+                                <div style={{ margin: '10px' }}>
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">Segment</InputLabel>
                                         <Select
@@ -134,7 +141,7 @@ export default function TransitionsModal() {
                         >
                             + Add new schema
                         </Link>
-                        <Typography id="transition-modal-description" sx={{ mt: 2, display: 'flex', gap: '2em' }}>
+                        <Typography id="transition-modal-description" sx={{ mt: '13em', display: 'flex', gap: '2em', background:'grey' }}>
                             <Button variant='outlined' onClick={handleSubmit}>Save the Segment</Button>
                             <Button variant='contained' onClick={handleClose}>Cancel</Button>
                         </Typography>
